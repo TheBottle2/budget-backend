@@ -10,9 +10,10 @@ export async function PATCH(request, { params }) {
     const { kullanici, hata } = yetkiKontrol(request);
     if (hata) return hata;
 
+    const { id }        = await params;
     const body          = await request.json();
     const validatedData = TransactionPatchDTO.parse(body);
-    const islem         = await TransactionService.patchIslem(params.id, kullanici.id, validatedData);
+    const islem         = await TransactionService.patchIslem(id, kullanici.id, validatedData);
 
     return NextResponse.json(islem, { status: 200 });
   } catch (error) {
@@ -29,7 +30,9 @@ export async function DELETE(request, { params }) {
     const { kullanici, hata } = yetkiKontrol(request);
     if (hata) return hata;
 
-    await TransactionService.deleteIslem(params.id, kullanici.id, kullanici.rol);
+    const { id } = await params;
+
+    await TransactionService.deleteIslem(id, kullanici.id, kullanici.rol);
     return NextResponse.json({ mesaj: 'İşlem silindi.' }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ mesaj: error.message }, { status: 400 });

@@ -37,7 +37,6 @@ export const baseSchemaOptions = {
   },
 };
 
-// Soft delete'i otomatik filtreleyen yardımcı fonksiyon
 export const addSoftDeleteFilter = (filter = {}) => ({
   ...filter,
   silindi_mi: false,

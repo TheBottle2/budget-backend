@@ -11,7 +11,6 @@ const config = {
   },
 };
 
-// Zorunlu değişkenleri kontrol et
 const zorunluDegiskenler = ['MONGODB_URI', 'JWT_SECRET'];
 
 zorunluDegiskenler.forEach((key) => {

@@ -6,7 +6,6 @@ if (!MONGODB_URI) {
   throw new Error('MONGODB_URI ortam değişkeni tanımlanmamış!');
 }
 
-// Next.js hot-reload sırasında bağlantının tekrar açılmasını önler
 let cached = global.mongoose;
 
 if (!cached) {
