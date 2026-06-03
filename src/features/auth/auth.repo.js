@@ -7,10 +7,10 @@ export class AuthRepo extends BaseRepo {
   }
 
   async findByEmail(email) {
-    return await UserModel.findOne({ email, silindi_mi: false });
+    return await UserModel.findOne({ email, silindi_mi: false }).select('+sifre');
   }
 
   async emailVarMi(email) {
-    return await UserModel.exists({ email });
+    return await UserModel.exists({ email, silindi_mi: false });
   }
 }

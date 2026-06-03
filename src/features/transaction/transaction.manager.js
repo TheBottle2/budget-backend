@@ -10,7 +10,12 @@ export class TransactionManager extends BaseManager {
   }
 
   async islemEkle(kullanici_id, data) {
-    return await this.repo.create({ ...data, kullanici_id });
+    const islemData = {
+      ...data,
+      kullanici_id,
+      tarih: data.tarih ? new Date(data.tarih) : new Date(),
+    };
+    return await this.repo.create(islemData);
   }
 
   async islemGuncelle(id, kullanici_id, data) {
@@ -19,7 +24,9 @@ export class TransactionManager extends BaseManager {
     if (islem.kullanici_id.toString() !== kullanici_id.toString()) {
       throw new Error('Bu işlemi düzenleme yetkiniz yok!');
     }
-    return await this.repo.patch(id, data);
+    const updateData = { ...data };
+    if (updateData.tarih) updateData.tarih = new Date(updateData.tarih);
+    return await this.repo.patch(id, updateData);
   }
 
   async islemSil(id, kullanici_id, rol) {
@@ -29,11 +36,5 @@ export class TransactionManager extends BaseManager {
       throw new Error('Bu işlemi silme yetkiniz yok!');
     }
     return await this.repo.softDelete(id);
-  }
-
-  ozetHesapla(islemler) {
-    const gelir = islemler.filter((t) => t.tur === 'gelir').reduce((acc, t) => acc + t.tutar, 0);
-    const gider = islemler.filter((t) => t.tur === 'gider').reduce((acc, t) => acc + t.tutar, 0);
-    return { gelir, gider, bakiye: gelir - gider };
   }
 }

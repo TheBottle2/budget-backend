@@ -5,6 +5,8 @@ import { TransactionService } from '../../../features/transaction/transaction.se
 import { TransactionCreateDTO } from '../../../features/transaction/transaction.dto.js';
 import { handleApiError } from '../../../lib/errorHandler.js';
 
+const ALLOWED_SORT_FIELDS = ['tarih', 'tutar', 'kategori', 'ad', 'olusturulma_tarihi'];
+
 export async function GET(request) {
   try {
     await connectDB();
@@ -12,11 +14,12 @@ export async function GET(request) {
     if (hata) return hata;
 
     const { searchParams } = new URL(request.url);
+    const sortBy = searchParams.get('sortBy') || 'tarih';
     const params = {
       kullanici_id: kullanici.id,
       tur: searchParams.get('tur') || undefined,
       kategori: searchParams.get('kategori') || undefined,
-      sortBy: searchParams.get('sortBy') || 'tarih',
+      sortBy: ALLOWED_SORT_FIELDS.includes(sortBy) ? sortBy : 'tarih',
       sortOrder: searchParams.get('sortOrder') === 'asc' ? 1 : -1,
       page: Number(searchParams.get('page')) || 1,
       limit: Number(searchParams.get('limit')) || 10,

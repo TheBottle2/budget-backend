@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+const sanitize = (str) => str.replace(/[<>'"&]/g, (c) => ({
+  '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;', '&': '&amp;',
+}[c]));
+
 const passwordSchema = z
   .string()
   .min(8, 'Şifre en az 8 karakter olmalıdır')
@@ -9,7 +13,7 @@ const passwordSchema = z
   .regex(/[^A-Za-z0-9]/, 'Şifre en az bir özel karakter içermelidir');
 
 export const RegisterDTO = z.object({
-  ad: z.string().min(2, 'Ad en az 2 karakter olmalıdır').max(50),
+  ad: z.string().min(2, 'Ad en az 2 karakter olmalıdır').max(50).transform(sanitize),
   email: z.string().email('Geçersiz e-posta formatı').toLowerCase().trim(),
   sifre: passwordSchema,
 });

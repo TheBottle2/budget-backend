@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
+import config from './config.js';
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
+if (!config.mongodb.uri) {
   throw new Error('MONGODB_URI ortam değişkeni tanımlanmamış!');
 }
 
@@ -20,12 +19,12 @@ export async function connectDB() {
       bufferCommands: false,
       serverSelectionTimeoutMS: 5000,
       maxPoolSize: 10,
-      ...(process.env.NODE_ENV === 'production' && {
+      ...(config.app.nodeEnv === 'production' && {
         tls: true,
         tlsAllowInvalidCertificates: false,
       }),
     };
-    cached.promise = mongoose.connect(MONGODB_URI, options);
+    cached.promise = mongoose.connect(config.mongodb.uri, options);
   }
 
   cached.conn = await cached.promise;
