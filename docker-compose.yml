@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mongodb-budget:
+    image: mongo:latest
+    container_name: mongodb-budget
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_budget_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongodb_budget_data:
