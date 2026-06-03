@@ -21,7 +21,7 @@ function rateLimit(ip, limit = 10, windowMs = 60 * 1000) {
   return requests.length <= limit;
 }
 
-export function middleware(request) {
+export function proxy(request) {
   const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
   const pathname = request.nextUrl.pathname;
 
