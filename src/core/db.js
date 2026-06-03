@@ -16,9 +16,16 @@ export async function connectDB() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
+    const options = {
       bufferCommands: false,
-    });
+      serverSelectionTimeoutMS: 5000,
+      maxPoolSize: 10,
+      ...(process.env.NODE_ENV === 'production' && {
+        tls: true,
+        tlsAllowInvalidCertificates: false,
+      }),
+    };
+    cached.promise = mongoose.connect(MONGODB_URI, options);
   }
 
   cached.conn = await cached.promise;
